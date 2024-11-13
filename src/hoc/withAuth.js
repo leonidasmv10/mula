@@ -1,28 +1,41 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';  // Usamos useNavigate para las redirecciones
-import { getUserFromToken } from '../services/auth';  // Función que decodifica el JWT
+import { useNavigate } from 'react-router-dom';  // Para redirección
+import { jwtDecode } from "jwt-decode";           // Para decodificar el JWT
 
-const withAuth = (WrappedComponent, requiredRole) => {
-    return ({ ...props }) => {
-        const navigate = useNavigate();
-        const user = getUserFromToken();
+// Función para obtener el usuario decodificado del JWT almacenado
+const getUserFromToken = () => {
+    const token = localStorage.getItem('token'); // O donde guardes tu JWT
+    if (!token) return null;
 
-        console.log(user);
+    try {
+        const decoded = jwtDecode(token); // Decodificamos el JWT
+        console.log(decoded);
+        return decoded; // Devuelve el usuario decodificado (ej. id, rol, nombre, etc.)
+    } catch (error) {
+        return null; // Si el token es inválido, regresamos null
+    }
+};
 
-        // Si el usuario no está autenticado, redirigir a la página de login
+// Componente HOC para proteger rutas
+const withAuth = (Component) => {
+    return ({ role, ...props }) => {
+        const navigate = useNavigate();  // Hook para redirección
+        const user = getUserFromToken(); // Obtener datos del usuario del token
+
+        // Si el usuario no está autenticado, redirigimos al login
         if (!user) {
-            navigate("/login");  // Redirige al login si no está autenticado
-            return null;  // Evitar que se renderice el componente si el usuario no está autenticado
+            navigate('/login');  // Redirigir a login si no está autenticado
+            return null;  // No renderizamos el componente
         }
 
-        // Si el rol del usuario no coincide con el requerido, redirigir a una página de acceso no autorizado
-        if (user.is_admin !== requiredRole) {
-            navigate("/unauthorized");  // Redirige a la página de acceso no autorizado
-            return null;  // Evitar que se renderice el componente si el rol no es el adecuado
+        // Si el rol del usuario no coincide con el rol requerido, redirigimos
+        if (role && user.role !== role) {
+            navigate('/unauthorized');  // Redirigir a página de acceso no autorizado
+            return null;  // No renderizamos el componente
         }
 
-        // Si todo está bien, renderizamos el componente envuelto
-        return <WrappedComponent {...props} user={user} />;
+        // Si todo está bien, renderizamos los componentes hijos
+        return <Component user={user} {...props} />;
     };
 };
 

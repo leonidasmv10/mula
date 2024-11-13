@@ -11,5 +11,4 @@ function UnauthorizedPage() {
 }
 
 export default UnauthorizedPage;
-
-// export default withAuth( UnauthorizedPage,"admin");
+// export default withAuth(UnauthorizedPage)("admin");

@@ -4,6 +4,9 @@ import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import UserPage from "./pages/UserPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+import withAuth from "./hoc/withAuth";
+
+const UnauthorizedPageWithAuth = withAuth(UnauthorizedPage)('admin');
 
 const App = () => {
   return (
@@ -12,7 +15,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/user" element={<UserPage />} />
-        <Route path="/admin" element={<UnauthorizedPage />} />
+        <Route path="/admin" element={<UnauthorizedPageWithAuth />} />
       </Routes>
     </>
   );
