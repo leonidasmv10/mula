@@ -5,8 +5,11 @@ import {
   GlobeIcon,
   //   MagnifyingGlassIcon,
 } from "lucide-react";
+import { useGetUser } from "../hooks/useGetUser";
 
 const TriviaGameBootstrap = () => {
+  const { user, setUser } = useGetUser();
+
   return (
     <div className="card">
       <div className="card-header">
@@ -20,16 +23,19 @@ const TriviaGameBootstrap = () => {
           </div>
         </div>
         <div className="row row-cols-3 g-4 mt-4">
-          <div className="col">
-            <button className="btn btn-primary w-100">
-              <LightbulbIcon className="w-8 h-8" />
-              <h3>Jugar</h3>
-            </button>
-          </div>
+          {user && (
+            <div className="col">
+              <button className="btn btn-primary w-100">
+                <LightbulbIcon className="w-8 h-8" />
+                <h6>Jugar</h6>
+              </button>
+            </div>
+          )}
+
           <div className="col">
             <button className="btn btn-success w-100">
               <BookIcon className="w-8 h-8" />
-              <h3>Ranking</h3>
+              <h6>Ranking</h6>
             </button>
           </div>
           <div className="col">

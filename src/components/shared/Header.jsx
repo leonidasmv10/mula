@@ -5,26 +5,25 @@ import Modal from "react-bootstrap/Modal";
 import LoginForm from "../LoginForm";
 import { toast } from "react-toastify";
 import { AdminContext } from "../../AdminProvider";
+import { getUserFromToken, logout } from "../../services/auth";
+import { useGetUser } from "../../hooks/useGetUser";
 
 const Header = () => {
+  // const [user, setUser] = useState();
+
+  const { user, setUser } = useGetUser();
+
+  // const user = getUserFromToken();
   const { isAdmin, setIsAdmin } = useContext(AdminContext);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleLogin = (data) => {
-    if (data.user === "devgrids" && data.password === "code123") {
-      handleClose();
-      toast.success("¡Logeado correctamente!");
-      setIsAdmin(true);
-    } else {
-      toast.error("Datos incorrectos");
-    }
-  };
-
   const handleLogout = () => {
     setIsAdmin(false);
+    logout();
+    setUser(null);
     toast.success("¡Cerraste sesión correctamente!");
   };
 
@@ -38,9 +37,16 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link} to="/login">
-                Login
-              </Nav.Link>
+              {user ? (
+                <Nav.Link as={Link} onClick={handleLogout} to="/">
+                  Logout
+                </Nav.Link>
+              ) : (
+                <Nav.Link as={Link} to="/login">
+                  Login
+                </Nav.Link>
+              )}
+
               {isAdmin && (
                 <>
                   <NavDropdown title="Administrador" id="basic-nav-dropdown">
