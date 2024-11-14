@@ -2,7 +2,7 @@ import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import Modal from "react-bootstrap/Modal";
-import LoginForm from "../LoginForm";
+import LoginForm from "../forms/LoginForm";
 import { toast } from "react-toastify";
 import { AdminContext } from "../../AdminProvider";
 import { getUserFromToken, logout } from "../../services/auth";

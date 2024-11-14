@@ -1,47 +1,29 @@
 // src/pages/LoginPage.js
 import React, { useState } from "react";
 import { getUserFromToken, login } from "../services/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Actualiza la importación
 import BaseLayout from "../components/layouts/BaseLayout";
-import UsersController from "../controllers/mula/usersController";
-import ConfirmationModal from "../components/ConfirmationModal";
 import { toast } from "react-toastify";
 
-const Register = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const usersController = new UsersController();
-
-  function handleConfirmation() {
-    setIsModalOpen(true);
-  }
-
-  const handleRegister = async () => {
+  const handleLogin = async () => {
     try {
-      const user = {
-        username: username,
-        password: password,
-      };
-
-      const id = await usersController.createData(user);
-      if (id != 0) {
-        toast.success("Usuario registrado correctamente!");
-        navigate("/");
-      } else {
-        toast.error("Usuario ya registrado");
-      }
+      await login(username, password);
+      toast.success("Bienvenido " + username);
+      navigate("/");
     } catch (error) {
-      toast.error(error);
+      toast.error("Credenciales incorrectas");
     }
   };
 
   return (
     <BaseLayout>
       <div>
-        <h2>Registrar Cuenta</h2>
+        <h2>Iniciar sesión</h2>
 
         <div className="mb-3">
           <label className="form-label">Usuario</label>
@@ -65,19 +47,22 @@ const Register = () => {
           />
         </div>
 
-        <button className="btn btn-primary" onClick={handleConfirmation}>
-          Registrar
+        <button className="btn btn-primary" onClick={handleLogin}>
+          Iniciar Sesión
         </button>
-
-        <ConfirmationModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onConfirm={handleRegister}
-          message="¿Estás seguro de que ingresó los datos correctos?"
-        />
+        <div>
+          <hr></hr>
+          <h5>¿No tienes cuenta? Registrate aquí</h5>
+          <br></br>
+          <Link to="/register">
+            <button type="button" className="btn btn-success">
+              Crear Cuenta
+            </button>
+          </Link>
+        </div>
       </div>
     </BaseLayout>
   );
 };
 
-export default Register;
+export default LoginPage;

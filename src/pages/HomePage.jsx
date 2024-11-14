@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import BaseLayout from "../components/layouts/BaseLayout";
-import TriviaGameBootstrap from "../components/TriviaGameBootstrap";
+import TriviaOptions from "../components/TriviaOptions";
 import { useGetUser } from "../hooks/useGetUser";
 
-function Home() {
+function HomePage() {
   const { user, getUser } = useGetUser();
 
   useEffect(() => {
@@ -14,10 +14,10 @@ function Home() {
     <>
       <BaseLayout>
         {user && <h2>{user.UserId}</h2>}
-        <TriviaGameBootstrap />
+        <TriviaOptions />
       </BaseLayout>
     </>
   );
 }
 
-export default Home;
+export default HomePage;

@@ -1,20 +1,23 @@
-class MulaController {
-  constructor(path = "") {
-    this.url = `${import.meta.env.VITE_MULA_API_URL}/${path}`;
+class OpenTriviaController {
+  constructor() {}
+
+  createUrl(category_id) {
+    return `https://opentdb.com/api.php?amount=10&category=${category_id}&type=multiple`;
   }
 
-  async createData(data) {
+  async getTrivia(category_id) {
     try {
       const options = {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
       };
-      const response = await fetch(this.url, options);
+
+      const url = this.createUrl(category_id);
+      const response = await fetch(url, options);
       const result = await response.json();
-      return result.id;
+      console.log(result);
     } catch (e) {
       console.error("Error: ", e);
       return 0;
@@ -40,4 +43,4 @@ class MulaController {
   }
 }
 
-export default MulaController;
+export default OpenTriviaController;
