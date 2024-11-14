@@ -11,24 +11,22 @@ import { ToastContainer } from "react-toastify";
 import { UserProvider } from "./hooks/useGetUser.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <AdminProvider>
-        <UserProvider>
-          <App />
-        </UserProvider>
-      </AdminProvider>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
-    </BrowserRouter>
-  </StrictMode>
+  <BrowserRouter>
+    <AdminProvider>
+      <UserProvider>
+        <App />
+      </UserProvider>
+    </AdminProvider>
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
+  </BrowserRouter>
 );

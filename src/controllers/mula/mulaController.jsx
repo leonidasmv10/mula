@@ -22,14 +22,13 @@ class MulaController {
   }
 
   async get() {
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
     try {
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
       const response = await fetch(this.url, options);
       const result = await response.json();
       return result;
