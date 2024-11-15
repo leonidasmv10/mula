@@ -13,7 +13,6 @@ function HomePage() {
   return (
     <>
       <BaseLayout>
-        {user && <h2>{user.UserId}</h2>}
         <TriviaOptions />
       </BaseLayout>
     </>

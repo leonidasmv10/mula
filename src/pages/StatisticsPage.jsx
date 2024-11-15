@@ -40,13 +40,23 @@ function StatisticsPage() {
     <BaseLayout>
       <h2>Mis Estadísticas</h2>
 
-      {personalStats && <PersonalStatsSummary stats={personalStats[0]} />}
+      {/* Verificar si hay estadísticas personales */}
+      {personalStats && personalStats.length > 0 ? (
+        <PersonalStatsSummary stats={personalStats[0]} />
+      ) : (
+        <p>No hay estadísticas disponibles. ¡Comienza a jugar!</p>
+      )}
 
       <br></br>
+
+      {/* Verificar si hay estadísticas por categoría */}
       {categoryStats.length > 0 ? (
-        <CategoryStatsTable stats={categoryStats} />
+        <CategoryStatsTable stats={categoryStats} categories={categories} />
       ) : (
-        <p>No hay estadísticas disponibles por categoría.</p>
+        <p>
+          No hay estadísticas disponibles por categoría. ¡Juega en diferentes
+          categorías para obtener estadísticas!
+        </p>
       )}
     </BaseLayout>
   );
@@ -71,22 +81,35 @@ const PersonalStatsSummary = ({ stats }) => {
   );
 };
 
-const CategoryStatsTable = ({ stats }) => {
+const CategoryStatsTable = ({ stats, categories }) => {
   return (
     <table className="table table-striped">
       <thead>
         <tr>
-          <th>Categoría ID</th>
+          <th>Categoría</th>
           <th>Media de Respuestas Correctas</th>
         </tr>
       </thead>
       <tbody>
-        {stats.map((categoryStat, index) => (
-          <tr key={index}>
-            <td>{categoryStat.categoryId}</td>
-            <td>{categoryStat.averageCorrectAnswers}</td>
+        {stats.length > 0 ? (
+          stats.map((categoryStat, index) => {
+            // Encuentra el nombre de la categoría usando el categoryId
+            const categoryName = categories.find(
+              (category) => category.id === categoryStat.categoryId
+            )?.name;
+
+            return (
+              <tr key={index}>
+                <td>{categoryName || "Categoría desconocida"}</td>
+                <td>{categoryStat.averageCorrectAnswers}</td>
+              </tr>
+            );
+          })
+        ) : (
+          <tr>
+            <td colSpan="2">No hay estadísticas disponibles para mostrar.</td>
           </tr>
-        ))}
+        )}
       </tbody>
     </table>
   );
