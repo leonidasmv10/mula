@@ -6,7 +6,7 @@ import UsersController from "../controllers/mula/usersController";
 
 function RankingPage() {
   const categoriesController = new CategoriesController();
-  const [selectedCategory, setSelectedCategory] = useState(1);
+  const [selectedCategory, setSelectedCategory] = useState(0);
   const [categories, setCategories] = useState([]);
 
   const triviaController = new TriviaController();
@@ -24,7 +24,7 @@ function RankingPage() {
 
         try {
           // Obtén el ranking directamente
-          const dataT = await triviaController.get_ranking(selectedCategory);
+          const dataT = await triviaController.get_global_ranking();
           setRanking(dataT); // Actualiza el estado de ranking
           console.log(dataT);
 
@@ -55,7 +55,14 @@ function RankingPage() {
 
     try {
       // Obtén el ranking
-      const dataT = await triviaController.get_ranking(selectedValue);
+
+      var dataT = null;
+
+      if (selectedValue == 0) {
+        dataT = await triviaController.get_global_ranking();
+      } else {
+        dataT = await triviaController.get_ranking(selectedValue);
+      }
       console.log("Respuesta de get_ranking:", dataT);
 
       // Asegúrate de que sea un array
@@ -94,21 +101,35 @@ function RankingPage() {
           value={selectedCategory ?? ""}
           onChange={handleCategoryChange}
         >
+          <option key={0} value={0} selected>
+            Ranking Global
+          </option>
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
             </option>
           ))}
         </select>
+        <br></br>
 
-        <ul>
-          {users.map((item, index) => (
-            <li key={index}>
-              {item.user?.username || "Usuario desconocido"}:{" "}
-              {item.averageCorrectAnswers} puntos
-            </li>
-          ))}
-        </ul>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Usuario</th>
+              <th>Media % correctas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((item, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{item.user?.username || "Usuario desconocido"}</td>
+                <td>{item.averageCorrectAnswers}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </BaseLayout>
     </>
   );
