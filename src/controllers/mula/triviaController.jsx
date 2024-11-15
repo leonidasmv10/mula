@@ -33,14 +33,95 @@ class TriviaController extends MulaController {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: token_header,
+          // Authorization: token_header,
         },
       };
-      console.log( this.url + "/questions/" + category_id);
       const response = await fetch(
         this.url + "/questions/" + category_id,
         options
       );
+      const result = await response.json();
+      return result;
+    } catch (e) {
+      console.error("Error:", e);
+      return [];
+    }
+  }
+
+  async get_ranking(category_id) {
+    try {
+      const token_header = "Bearer " + getToken();
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: token_header,
+        },
+      };
+      const response = await fetch(
+        this.url + "/category/" + category_id + "/ranking",
+        options
+      );
+      const result = await response.json();
+      return result;
+    } catch (e) {
+      console.error("Error:", e);
+      return [];
+    }
+  }
+
+  async get_global_ranking() {
+    try {
+      const token_header = "Bearer " + getToken();
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: token_header,
+        },
+      };
+      const response = await fetch(this.url + "/global-ranking", options);
+      const result = await response.json();
+      return result;
+    } catch (e) {
+      console.error("Error:", e);
+      return [];
+    }
+  }
+
+  async get_user_category_stats(user_id) {
+    try {
+      const token_header = "Bearer " + getToken();
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: token_header,
+        },
+      };
+      const response = await fetch(
+        this.url + "/user/" + user_id + "/category-stats",
+        options
+      );
+      const result = await response.json();
+      return result;
+    } catch (e) {
+      console.error("Error:", e);
+      return [];
+    }
+  }
+
+  async get_user_stats(user_id) {
+    try {
+      const token_header = "Bearer " + getToken();
+      const options = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: token_header,
+        },
+      };
+      const response = await fetch(this.url + "/userStats/" + user_id, options);
       const result = await response.json();
       return result;
     } catch (e) {

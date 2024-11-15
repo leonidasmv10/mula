@@ -1,33 +1,36 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import BaseLayout from "../components/layouts/BaseLayout";
 
 function GameResultPage() {
   const location = useLocation(); // Para obtener los datos del estado de navegación
   const navigate = useNavigate();
-  const { correctAnswers, totalQuestions } = location.state || {
+  const { correctAnswers, totalQuestions, categoryId } = location.state || {
     correctAnswers: 0,
     totalQuestions: 0,
+    categoryId: 0,
   };
 
   // Función para reiniciar el juego
   const handlePlayAgain = () => {
-    navigate("/game");
+    navigate(`/game?category_id=${categoryId}`);
   };
 
   // Función para ver el ranking
   const handleViewRanking = () => {
     navigate("/ranking");
   };
-
   return (
-    <div>
-      <h2>Resultados del Juego</h2>
-      <ScoreSummary
-        correctAnswers={correctAnswers}
-        totalQuestions={totalQuestions}
-      />
-      <PlayAgainButton onClick={handlePlayAgain} />
-      <ViewRankingButton onClick={handleViewRanking} />
-    </div>
+    <BaseLayout>
+      <div>
+        <h2>Resultados del Juego</h2>
+        <ScoreSummary
+          correctAnswers={correctAnswers}
+          totalQuestions={totalQuestions}
+        />
+        <PlayAgainButton onClick={handlePlayAgain} />
+        <ViewRankingButton onClick={handleViewRanking} />
+      </div>
+    </BaseLayout>
   );
 }
 

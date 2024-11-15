@@ -2,16 +2,22 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import BaseLayout from "../components/layouts/BaseLayout";
 import TriviaController from "../controllers/mula/triviaController";
+import { useGetUser } from "../hooks/useGetUser";
 
 function GamePage() {
   const triviaController = new TriviaController();
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate(); // Hook para la redirección
+  const navigate = useNavigate();
   const categoryId = searchParams.get("category_id");
   const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [timer, setTimer] = useState(60);
+  const { user, getUser } = useGetUser();
+
+  useEffect(() => {
+    getUser();
+  }, []);
 
   // Temporizador que se resetea con cada pregunta
   useEffect(() => {
@@ -50,7 +56,7 @@ function GamePage() {
   }, [categoryId]);
 
   // Función para avanzar a la siguiente pregunta
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       setTimer(60); // Reinicia el temporizador
@@ -59,8 +65,17 @@ function GamePage() {
       const correctAnswers = userAnswers.filter(
         (answer) => answer.isCorrect
       ).length;
+
+      const nQuestions = questions.length;
+      const gameResult = {
+        userId: user.UserId,
+        correctAnswers: correctAnswers,
+        categoryId: categoryId,
+        date: new Date().toISOString(),
+      };
+      await triviaController.create_game_result(gameResult);
       navigate("/game_result", {
-        state: { correctAnswers, totalQuestions: questions.length },
+        state: { correctAnswers, totalQuestions: nQuestions, categoryId },
       });
     }
   };
