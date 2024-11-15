@@ -10,8 +10,8 @@ function StatisticsPage() {
   const user = getUserFromToken();
 
   const [categories, setCategories] = useState([]);
-  const [personalStats, setPersonalStats] = useState(null); // Estadísticas generales
-  const [categoryStats, setCategoryStats] = useState([]); // Estadísticas por categoría
+  const [personalStats, setPersonalStats] = useState(null);
+  const [categoryStats, setCategoryStats] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {

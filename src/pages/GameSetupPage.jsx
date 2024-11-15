@@ -5,7 +5,6 @@ import { CirclePlay } from "lucide-react";
 import CategoriesController from "../controllers/mula/categoriesController";
 
 function GameSetupPage() {
- 
   const categoriesController = new CategoriesController();
   const [selectedCategory, setSelectedCategory] = useState(1);
   const [categories, setCategories] = useState([]);
@@ -45,12 +44,6 @@ function GameSetupPage() {
           ))}
         </select>
         <br></br>
-        {selectedCategory && (
-          <p>
-            Categoría seleccionada:{" "}
-            {categories.find((cat) => cat.id === selectedCategory)?.name}
-          </p>
-        )}
 
         <Link to={`/game?category_id=${selectedCategory}`}>
           <button className="btn btn-success w-100">
